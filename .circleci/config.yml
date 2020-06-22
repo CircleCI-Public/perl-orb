@@ -61,12 +61,12 @@ workflows:
       # integration tests of your choosing
 
       # an example job
-      # - perl/build:
-      #     codecov: true
-      #     save-to-workspace: true
-      #     save-to-artifacts: true
-      # - perl/test-linux:
-      #     requires: [perl/build]
+      - perl/build:
+          codecov: true
+          save-to-workspace: true
+          save-to-artifacts: true
+      - perl/test-linux:
+          requires: [perl/build]
 
       # publish a semver version of the orb. relies on
       # the commit subject containing the text "[semver:patch|minor|major|skip]"
@@ -80,9 +80,9 @@ workflows:
           add-pr-comment: false
           fail-if-semver-not-indicated: true
           publish-version-tag: false
-          # requires:
-          #   - perl/build
-          #   - perl/test-linux
+          requires:
+            - perl/build
+            - perl/test-linux
           filters:
             branches:
               only: master
