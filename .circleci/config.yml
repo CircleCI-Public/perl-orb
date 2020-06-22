@@ -17,19 +17,6 @@ parameters:
     type: string
     default: "dev:alpha"
 
-jobs:
-  # This job is an example of an integration testing job.
-  # This job should execute a command from your orb and verify
-  # the output is as expected, otherwise the job should fail.
-  #
-  # Rename this job and add more as needed.
-  #
-  integration-test-1:
-    executor: orb-tools/ubuntu
-    steps:
-      - checkout
-    # - your-orb/your-orb-command
-
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
   lint_pack-validate_publish-dev:
@@ -50,6 +37,7 @@ workflows:
       # if using Contexts, add your context below
       - orb-tools/publish-dev:
           orb-name: circleci/perl
+          context: orb-publishing
           requires:
             - orb-tools/pack
 
@@ -57,6 +45,7 @@ workflows:
       # dev:${CIRCLE_SHA1:0:7} version of your orb
       - orb-tools/trigger-integration-tests-workflow:
           name: trigger-integration-dev
+          context: orb-publishing
           requires:
             - orb-tools/publish-dev
 
@@ -72,7 +61,12 @@ workflows:
       # integration tests of your choosing
 
       # an example job
-      - integration-test-1
+      # - perl/build:
+      #     codecov: true
+      #     save-to-workspace: true
+      #     save-to-artifacts: true
+      # - perl/test-linux:
+      #     requires: [perl/build]
 
       # publish a semver version of the orb. relies on
       # the commit subject containing the text "[semver:patch|minor|major|skip]"
@@ -82,12 +76,13 @@ workflows:
       # e.g. [semver:patch] will cause a patch version to be published.
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/perl
-
+          context: orb-publishing
           add-pr-comment: false
-          fail-if-semver-not-indicated: false
+          fail-if-semver-not-indicated: true
           publish-version-tag: false
-          requires:
-            - integration-test-1
+          # requires:
+          #   - perl/build
+          #   - perl/test-linux
           filters:
             branches:
               only: master

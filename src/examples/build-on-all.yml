@@ -1,0 +1,30 @@
+description: >
+  This example builds and tests the distribution, then retests the
+  resulting build on all the different versions of Perl.
+usage:
+  version: 2.1
+  workflows:
+    main:
+      jobs:
+        - perl/build:
+            # run code coverage reports and upload them to https://codecov.io/
+            codecov: true
+            # save a copy of the build so that it can be run following jobs
+            save-to-workspace: true
+            # save a copy of the build as an artifact for later examination
+            save-to-artifacts: true
+        - perl/test-linux:
+            requires: [perl/build]
+            matrix:
+              parameters:
+                perl-version:
+                  - "5.10"
+                  - "5.12"
+                  - "5.14"
+                  - "5.16"
+                  - "5.18"
+                  - "5.20"
+                  - "5.22"
+                  - "5.24"
+                  - "5.26"
+                  - "5.28"

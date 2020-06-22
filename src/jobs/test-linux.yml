@@ -1,0 +1,27 @@
+description:
+  Rerun tests from a previous build cached in the workspace on a specific version of Perl running on Linux.
+  In order for this job to succeed the distribution to test must have been stored in the build_dir inside the workspace, which can be easily achieved with the build job by setting its save-to-workspace parameters to true
+parameters:
+  perl-version:
+    description: The Perl version we want to test with
+    type: string
+    default: "5.30"
+docker:
+  - image: perldocker/perl-tester:<< parameters.perl-version >>
+steps:
+  - attach_workspace:
+      at: /tmp/workspace
+  - run:
+      name: Install dependencies
+      command: |
+        cd /tmp/workspace/build_dir
+        cpm install -g \
+        --cpanfile cpanfile \
+        --with-develop \
+        --with-suggests \
+        --show-build-log-on-failure
+  - run:
+      name: Run Tests
+      command: |
+        cd /tmp/workspace/build_dir
+        prove -lr --jobs 2 t xt

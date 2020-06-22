@@ -1,0 +1,48 @@
+description: |
+  Builds and test the Perl distribution.
+parameters:
+  codecov:
+    description: Should we enable code coverage reporting and upload reports to https://codecov.io/ ?
+    type: boolean
+    default: false
+  perl-version:
+    description: The Perl version we want to do the build and test with
+    type: string
+    default: "5.30"
+  save-to-artifacts:
+    description: Should the resulting build be saved to the artifacts for this pipeline?
+    type: boolean
+    default: false
+  save-to-workspace:
+    description: Should the resulting build be stored in the CircleCI workspace for this pipeline so that other jobs in the pipeline can test it?
+    type: boolean
+    default: false
+docker:
+  - image: perldocker/perl-tester:<< parameters.perl-version >>
+steps:
+  - checkout
+  - run:
+      name: Build and Test Distribution
+      command: /usr/local/bin/auto-build-and-test-dist
+  - when:
+      condition: << parameters.save-to-artifacts >>
+      steps:
+        - run:
+            name: Make tarball
+            command: tar -cvzf build.tar.gz build_dir
+        - store_artifacts:
+            path: build.tar.gz
+  - when:
+      condition: << parameters.save-to-workspace >>
+      steps:
+        - persist_to_workspace:
+            root: .
+            paths: build_dir
+  - when:
+      condition: << parameters.codecov >>
+      steps:
+        - run:
+            name: Run code coverage report and upload to codecov.io
+            command: |
+              cpanm -n Dist::Zilla::App::Command::cover
+              dzil cover --report codecov
