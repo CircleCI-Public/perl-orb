@@ -5,7 +5,7 @@ parameters:
   perl-version:
     description: The Perl version we want to test with
     type: string
-    default: "5.30"
+    default: "5.32"
 docker:
   - image: perldocker/perl-tester:<< parameters.perl-version >>
 steps:

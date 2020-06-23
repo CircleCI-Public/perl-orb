@@ -8,7 +8,7 @@ parameters:
   perl-version:
     description: The Perl version we want to do the build and test with
     type: string
-    default: "5.30"
+    default: "5.32"
   save-to-artifacts:
     description: Should the resulting build be saved to the artifacts for this pipeline?
     type: boolean
