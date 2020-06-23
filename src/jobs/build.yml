@@ -21,6 +21,13 @@ docker:
   - image: perldocker/perl-tester:<< parameters.perl-version >>
 steps:
   - checkout
+  - when:
+      condition: << parameters.codecov >>
+      steps:
+        - run:
+            name: Enable codecov.io code coverage reporting
+            command: |
+              echo 'export CODECOV_ENABLE=1' >> $BASH_ENV
   - run:
       name: Build and Test Distribution
       command: /usr/local/bin/auto-build-and-test-dist
@@ -38,11 +45,3 @@ steps:
         - persist_to_workspace:
             root: .
             paths: build_dir
-  - when:
-      condition: << parameters.codecov >>
-      steps:
-        - run:
-            name: Run code coverage report and upload to codecov.io
-            command: |
-              cpanm -n Dist::Zilla::App::Command::cover
-              dzil cover --report codecov
