@@ -9,7 +9,8 @@ usage:
         - perl/build:
             # run code coverage reports and upload them to https://codecov.io/
             codecov: true
-            # save a copy of the build so that it can be run following jobs
+            # save a copy of the build so that it can be run in the following
+            # perl/test-linux job
             save-to-workspace: true
             # save a copy of the build as an artifact for later examination
             save-to-artifacts: true

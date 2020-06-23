@@ -1,4 +1,4 @@
-description:
+description: <
   Rerun tests from a previous build cached in the workspace on a specific version of Perl running on Linux.
   In order for this job to succeed the distribution to test must have been stored in the build_dir inside the workspace, which can be easily achieved with the build job by setting its save-to-workspace parameters to true
 parameters:

@@ -1,7 +1,7 @@
 version: 2.1
 
 description: >
-  Common CircleCI tasks for the Perl programming language.
+  Orb for building and testing Perl distributions.
 
 display:
   source_url: "https://github.com/CircleCI-Public/perl-orb"
