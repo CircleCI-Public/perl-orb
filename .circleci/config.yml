@@ -82,6 +82,7 @@ workflows:
           bot-user: cpe-bot
           fail-if-semver-not-indicated: true
           publish-version-tag: false
+          ssh-fingerprints: "eb:49:87:f2:c4:4a:2f:30:06:79:f7:82:9a:24:ee:ef"
           requires:
             - perl/build
             - perl/test-linux
