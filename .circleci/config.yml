@@ -62,7 +62,6 @@ workflows:
 
       # an example job
       - perl/build:
-          codecov: true
           save-to-workspace: true
           save-to-artifacts: true
       - perl/test-linux:
