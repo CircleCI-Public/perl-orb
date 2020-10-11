@@ -6,6 +6,14 @@ Orb for building and testing Perl distributions.
 
 Example use-cases are provided on the orb [registry page](https://circleci.com/orbs/registry/orb/circleci/perl#usage-examples). Source for these examples can be found within the `src/examples` directory.
 
+## Prerequisites
+
+Some of the jobs included in this orb have certain prerequisites:
+
+- `perl/build` - This job assumes that your repository follows the `Dist::Zilla` pattern, where there is a `dist.ini` file which controls the build.
+- `perl/test-linux` - This job assumes you have `Dist::Zilla` pattern, as well as a `cpanfile` for all dependencies.
+- `perl/makefile-build` - This job assumes that you have a `Makefile.PL` build process, depending on `ExtUtils::MakeMaker`.
+
 ## Resources
 
 [CircleCI Orb Registry Page](https://circleci.com/orbs/registry/orb/circleci/perl) - The official registry page of this orb for all versions, executors, commands, and jobs described.  
