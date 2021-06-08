@@ -1,0 +1,40 @@
+description: |
+  Builds and test the Perl distribution, but using the Makefile.PL method.
+parameters:
+  codecov:
+    description: Should we enable code coverage reporting and upload reports to https://codecov.io/ ?
+    type: boolean
+    default: false
+  perl-version:
+    description: The Perl version we want to do the build and test with
+    type: string
+    default: "5.32"
+  save-to-workspace:
+    description: Should the resulting build be stored in the CircleCI workspace for this pipeline so that other jobs in the pipeline can test it?
+    type: boolean
+    default: false
+docker:
+  - image: perldocker/perl-tester:<< parameters.perl-version >>
+steps:
+  - checkout
+  - when:
+      condition: << parameters.codecov >>
+      steps:
+        - run:
+            name: Enable codecov.io code coverage reporting
+            command: |
+              echo 'export CODECOV_ENABLE=1' >> $BASH_ENV
+  - run:
+      name: Build and Test Distribution
+      command: |
+        cpanm --install-deps .
+        perl ./Makefile.PL
+        make
+        make test
+  - when:
+      condition: << parameters.save-to-workspace >>
+      steps:
+        - persist_to_workspace:
+            root: .
+            paths: .
+
